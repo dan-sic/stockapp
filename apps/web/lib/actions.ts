@@ -1,14 +1,13 @@
 "use server";
 import { db } from "@stock-app/db";
-import { company, CompanyData, publicInformation } from "@stock-app/db/schema";
+import {
+  company,
+  CompanyData,
+  publicInformation,
+  pushSubscription,
+} from "@stock-app/db/schema";
 import { revalidatePath } from "next/cache";
-import webpush, { PushSubscription } from "web-push";
-
-webpush.setVapidDetails(
-  "mailto:daniel.sic@hotmail.com",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
+import { PushSubscription } from "web-push";
 
 export async function createCompany(data: CompanyData) {
   await db.insert(company).values(data);
@@ -26,35 +25,36 @@ export async function revalidateNotifications() {
   revalidatePath("/notifications");
 }
 
-let subscription: PushSubscription | null = null;
-
 export async function subscribeUser(sub: PushSubscription) {
-  subscription = sub;
-  // In a production environment, you would want to store the subscription in a database
-  // For example: await db.subscriptions.create({ data: sub })
-  return { success: true };
-}
-
-export async function sendNotification(message: string) {
-  if (!subscription) {
-    console.error("No subscription available");
-    throw new Error("No subscription available");
-  }
-
   try {
-    console.log("Sending notification to:", subscription.endpoint);
-    await webpush.sendNotification(
-      subscription,
-      JSON.stringify({
-        title: "New notifications",
-        body: message || "You have new updates available",
-        icon: "/icon192.png",
+    // Extract the keys from the subscription object
+    const p256dh = sub.keys?.p256dh;
+    const auth = sub.keys?.auth;
+
+    if (!p256dh || !auth) {
+      throw new Error("Invalid subscription keys");
+    }
+
+    // Check if subscription already exists and update, or insert new
+    await db
+      .insert(pushSubscription)
+      .values({
+        endpoint: sub.endpoint,
+        p256dh,
+        auth,
       })
-    );
-    console.log("Notification sent successfully");
+      .onConflictDoUpdate({
+        target: pushSubscription.endpoint,
+        set: {
+          p256dh,
+          auth,
+          updatedAt: new Date(),
+        },
+      });
+
     return { success: true };
   } catch (error) {
-    console.error("Error sending push notification:", error);
-    return { success: false, error: "Failed to send notification" };
+    console.error("Error saving subscription:", error);
+    return { success: false, error: "Failed to save subscription" };
   }
 }

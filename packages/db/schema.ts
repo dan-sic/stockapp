@@ -49,3 +49,15 @@ export const publicInformation = stockappSchema.table("public_information", {
 
 export type PublicInformationData = typeof publicInformation.$inferInsert;
 export type PublicInformation = typeof publicInformation.$inferSelect;
+
+export const pushSubscription = stockappSchema.table("push_subscription", {
+  id: serial("id").primaryKey(),
+  endpoint: text("endpoint").notNull().unique(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type PushSubscriptionData = typeof pushSubscription.$inferInsert;
+export type PushSubscription = typeof pushSubscription.$inferSelect;
