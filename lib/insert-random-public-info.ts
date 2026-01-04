@@ -78,7 +78,7 @@ async function main() {
   await insertRandomPublicInfo();
 
   // Then insert every 10 seconds
-  setInterval(insertRandomPublicInfo, 10000);
+  setInterval(insertRandomPublicInfo, 30000);
 }
 
 main();
