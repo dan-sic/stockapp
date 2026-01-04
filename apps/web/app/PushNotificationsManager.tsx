@@ -37,6 +37,7 @@ export const PushNotificationsManager = () => {
         ),
       });
       console.log("Push subscription created:", sub);
+      debugger;
       const serializedSub = JSON.parse(JSON.stringify(sub));
       await subscribeUser(serializedSub);
       console.log("User subscribed successfully");
@@ -70,19 +71,25 @@ export const PushNotificationsManager = () => {
 
     // Listen for messages from service worker to play notification sound
     function handleServiceWorkerMessage(event: MessageEvent) {
-      if (event.data && event.data.type === 'PLAY_NOTIFICATION_SOUND') {
-        console.log('Playing notification sound');
-        const audio = new Audio('/notification-sound.mp3');
-        audio.play().catch(err => console.error('Error playing sound:', err));
+      if (event.data && event.data.type === "PLAY_NOTIFICATION_SOUND") {
+        console.log("Playing notification sound");
+        const audio = new Audio("/notification-sound.mp3");
+        audio.play().catch((err) => console.error("Error playing sound:", err));
       }
     }
 
     if ("serviceWorker" in navigator && "PushManager" in window) {
       registerServiceWorker();
-      navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
+      navigator.serviceWorker.addEventListener(
+        "message",
+        handleServiceWorkerMessage
+      );
 
       return () => {
-        navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
+        navigator.serviceWorker.removeEventListener(
+          "message",
+          handleServiceWorkerMessage
+        );
       };
     }
   }, []);

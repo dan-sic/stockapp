@@ -1,7 +1,7 @@
 import "dotenv/config";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { db } from "./db";
-import { publicInformation } from "../db/schema";
+import { db } from "@stock-app/db";
+import { publicInformation } from "@stock-app/db/schema";
 
 const htmlSamples = [
   "<p>The company has announced a new product line that will revolutionize the market. <strong>Expected launch: Q2 2026</strong></p>",

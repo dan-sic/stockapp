@@ -1,6 +1,6 @@
 "use server";
-import { db } from "@/lib/db";
-import { company, CompanyData, publicInformation } from "@/db/schema";
+import { db } from "@stock-app/db";
+import { company, CompanyData, publicInformation } from "@stock-app/db/schema";
 import { revalidatePath } from "next/cache";
 import webpush, { PushSubscription } from "web-push";
 
