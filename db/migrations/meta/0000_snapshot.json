@@ -1,12 +1,12 @@
 {
-  "id": "17f273fb-0c50-4ca1-b80c-765e34fc7fd8",
+  "id": "c485138c-8acf-4c0f-8d0e-5bed7444947f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.company": {
+    "stockapp.company": {
       "name": "company",
-      "schema": "",
+      "schema": "stockapp",
       "columns": {
         "company_id": {
           "name": "company_id",
@@ -49,10 +49,145 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "stockapp.company_name_variation": {
+      "name": "company_name_variation",
+      "schema": "stockapp",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "variation": {
+          "name": "variation",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "company_name_variation_company_id_company_company_id_fk": {
+          "name": "company_name_variation_company_id_company_company_id_fk",
+          "tableFrom": "company_name_variation",
+          "tableTo": "company",
+          "schemaTo": "stockapp",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "company_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "stockapp.public_information": {
+      "name": "public_information",
+      "schema": "stockapp",
+      "columns": {
+        "public_information_id": {
+          "name": "public_information_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "source",
+          "typeSchema": "stockapp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "public_information_company_id_company_company_id_fk": {
+          "name": "public_information_company_id_company_company_id_fk",
+          "tableFrom": "public_information",
+          "tableTo": "company",
+          "schemaTo": "stockapp",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "company_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
-  "enums": {},
-  "schemas": {},
+  "enums": {
+    "stockapp.source": {
+      "name": "source",
+      "schema": "stockapp",
+      "values": [
+        "pap",
+        "espi"
+      ]
+    }
+  },
+  "schemas": {
+    "stockapp": "stockapp"
+  },
   "sequences": {},
   "roles": {},
   "policies": {},

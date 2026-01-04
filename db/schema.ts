@@ -1,17 +1,19 @@
 import {
-  pgEnum,
-  pgTable,
   serial,
   text,
   timestamp,
   varchar,
   integer,
+  pgSchema,
 } from "drizzle-orm/pg-core";
 
-// Define enum types BEFORE the tables
-export const sourceEnum = pgEnum("source", ["pap", "espi"]);
+// Create the stockapp schema
+export const stockappSchema = pgSchema("stockapp");
 
-export const company = pgTable("company", {
+// Define enum types BEFORE the tables
+export const sourceEnum = stockappSchema.enum("source", ["pap", "espi"]);
+
+export const company = stockappSchema.table("company", {
   id: serial("company_id").primaryKey(),
   name: varchar("name").notNull(),
   ticker: varchar("ticker").unique().notNull(),
@@ -21,7 +23,7 @@ export const company = pgTable("company", {
 export type CompanyData = typeof company.$inferInsert;
 export type Company = typeof company.$inferSelect;
 
-export const companyNameVariation = pgTable("company_name_variation", {
+export const companyNameVariation = stockappSchema.table("company_name_variation", {
   id: serial("id").primaryKey(),
   companyId: integer("company_id")
     .notNull()
@@ -33,7 +35,7 @@ export const companyNameVariation = pgTable("company_name_variation", {
 export type CompanyNameVariationData = typeof companyNameVariation.$inferInsert;
 export type CompanyNameVariation = typeof companyNameVariation.$inferSelect;
 
-export const publicInformation = pgTable("public_information", {
+export const publicInformation = stockappSchema.table("public_information", {
   id: serial("public_information_id").primaryKey(),
   title: varchar("title").notNull(),
   content: text("content").notNull(),
