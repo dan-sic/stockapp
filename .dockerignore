@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Development
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+
+# Next.js
+apps/web/.next
+apps/web/out
+apps/web/.swc
+
+# Build outputs
+apps/*/dist
+packages/*/dist
+*.tsbuildinfo
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+*.test.ts
+*.spec.ts
+
+# Documentation
+README.md
+*.md
+!packages/db/README.md

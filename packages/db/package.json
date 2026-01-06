@@ -4,10 +4,21 @@
   "private": true,
   "types": "./db.ts",
   "exports": {
-    ".": "./db.ts",
-    "./schema": "./schema.ts"
+    ".": {
+      "types": "./db.ts",
+      "require": "./dist/db.js",
+      "import": "./dist/db.js",
+      "default": "./db.ts"
+    },
+    "./schema": {
+      "types": "./schema.ts",
+      "require": "./dist/schema.js",
+      "import": "./dist/schema.js",
+      "default": "./schema.ts"
+    }
   },
   "scripts": {
+    "build": "tsc",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"

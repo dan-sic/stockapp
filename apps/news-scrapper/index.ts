@@ -1,5 +1,4 @@
 import "dotenv/config";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@stock-app/db";
 import { publicInformation } from "@stock-app/db/schema";
 
@@ -56,7 +55,11 @@ async function insertRandomPublicInfo() {
 
     await db.insert(publicInformation).values(newInfo);
 
-    await fetch("https://localhost:3000/api/revalidate", {
+    // Use environment variable for web service URL (Docker service name in production, localhost in dev)
+    const webServiceUrl =
+      process.env.WEB_SERVICE_URL || "https://localhost:3000";
+
+    await fetch(`${webServiceUrl}/api/revalidate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ path: "/notifications" }),

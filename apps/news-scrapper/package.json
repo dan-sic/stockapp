@@ -2,10 +2,10 @@
   "name": "@stock-app/scraper",
   "version": "0.1.0",
   "private": true,
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch index.ts",
-    "start": "tsx index.ts",
+    "start": "node dist/index.js",
     "build": "tsc"
   },
   "dependencies": {
