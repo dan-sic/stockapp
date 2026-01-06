@@ -8,11 +8,11 @@
   ],
   "scripts": {
     "dev:web": "npm run dev -w @stock-app/web",
-    "dev:scraper": "npm run dev -w @stock-app/scraper",
+    "dev:automation": "npm run dev -w @stock-app/automation",
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
     "build:web": "npm run build -w @stock-app/web",
-    "build:scraper": "npm run build -w @stock-app/scraper",
+    "build:automation": "npm run build -w @stock-app/automation",
     "start:web": "npm run start -w @stock-app/web",
     "db:generate": "npm run db:generate -w @stock-app/db",
     "db:migrate": "npm run db:migrate -w @stock-app/db",

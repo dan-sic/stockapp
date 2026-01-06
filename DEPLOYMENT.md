@@ -16,6 +16,7 @@ echo YOUR_GITHUB_TOKEN | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password
 ### 2. Update Configuration Files
 
 Edit the following files and replace `YOUR_GITHUB_USERNAME` with your actual GitHub username:
+
 - `docker-compose.prod.yml` (lines 4-5)
 - `deploy.sh` (line 5)
 
@@ -39,6 +40,7 @@ cd ~/stock-app
 ```
 
 Copy these files to your VPS:
+
 - `docker-compose.prod.yml`
 - `.env` (with production values)
 
@@ -75,6 +77,7 @@ docker compose -f docker-compose.prod.yml ps
 ## Common Commands
 
 ### Local (Build & Push)
+
 ```bash
 # Build and push
 ./deploy.sh
@@ -84,6 +87,7 @@ docker compose -f docker-compose.prod.yml ps
 ```
 
 ### VPS (Pull & Run)
+
 ```bash
 # Update to latest
 docker compose -f docker-compose.prod.yml pull
@@ -94,7 +98,7 @@ docker compose -f docker-compose.prod.yml restart web
 
 # View logs
 docker compose -f docker-compose.prod.yml logs -f web
-docker compose -f docker-compose.prod.yml logs -f scraper
+docker compose -f docker-compose.prod.yml logs -f automation
 
 # Stop all services
 docker compose -f docker-compose.prod.yml down
@@ -148,6 +152,7 @@ server {
 ## Troubleshooting
 
 ### Images not building
+
 ```bash
 # Check Docker is running
 docker ps
@@ -157,12 +162,14 @@ docker compose build --no-cache
 ```
 
 ### Can't push to registry
+
 ```bash
 # Re-login to GHCR
 echo YOUR_TOKEN | docker login ghcr.io -u YOUR_USERNAME --password-stdin
 ```
 
 ### Service not starting on VPS
+
 ```bash
 # Check logs
 docker compose -f docker-compose.prod.yml logs
@@ -177,6 +184,7 @@ If you prefer not to use a registry:
 
 1. Push code to GitHub
 2. On VPS:
+
 ```bash
 cd ~/stock-app
 git pull

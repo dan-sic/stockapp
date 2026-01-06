@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   web:
-    image: ghcr.io/YOUR_GITHUB_USERNAME/stock-app-web:latest
+    image: ghcr.io/dan-sic/stock-app-web:latest
     container_name: stock-app-web
     restart: unless-stopped
     ports:
@@ -16,14 +16,14 @@ services:
       - stock-app-network
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
 
-  scraper:
-    image: ghcr.io/YOUR_GITHUB_USERNAME/stock-app-scraper:latest
-    container_name: stock-app-scraper
+  automation:
+    image: ghcr.io/dan-sic/stock-app-automation:latest
+    container_name: stock-app-automation
     restart: unless-stopped
     environment:
       - NODE_ENV=production

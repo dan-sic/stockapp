@@ -3,6 +3,6 @@
   "references": [
     { "path": "./packages/db" },
     { "path": "./apps/web" },
-    { "path": "./apps/news-scrapper" }
+    { "path": "./apps/automation" }
   ]
 }
