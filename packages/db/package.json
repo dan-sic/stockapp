@@ -5,16 +5,24 @@
   "types": "./db.ts",
   "exports": {
     ".": {
-      "types": "./db.ts",
+      "import": "./db.ts",
       "require": "./dist/db.js",
-      "import": "./dist/db.js",
       "default": "./db.ts"
     },
     "./schema": {
-      "types": "./schema.ts",
+      "import": "./schema.ts",
       "require": "./dist/schema.js",
-      "import": "./dist/schema.js",
       "default": "./schema.ts"
+    },
+    "./jobMetadata": {
+      "import": "./jobMetadata.ts",
+      "require": "./dist/jobMetadata.js",
+      "default": "./jobMetadata.ts"
+    },
+    "./companies": {
+      "import": "./companies.ts",
+      "require": "./dist/companies.js",
+      "default": "./companies.ts"
     }
   },
   "scripts": {

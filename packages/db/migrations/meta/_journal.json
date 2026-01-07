@@ -15,6 +15,20 @@
       "when": 1767563227540,
       "tag": "0001_narrow_iron_monger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767790593168,
+      "tag": "0002_abnormal_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1767792718123,
+      "tag": "0003_perfect_bloodstorm",
+      "breakpoints": true
     }
   ]
 }

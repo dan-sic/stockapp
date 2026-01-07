@@ -1,0 +1,1 @@
+ALTER TABLE "stockapp"."company" ADD COLUMN "observed" boolean DEFAULT false NOT NULL;
