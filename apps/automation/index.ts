@@ -5,23 +5,40 @@ import { scrapeStockwatchInfoJob } from "./jobs/scrape-stockwatch-info-job/scrap
 console.log("Starting automation scheduler...\n");
 
 // Schedule: Scrape stockwatch info
-// Weekday: Every hour from 08:30-23:30, Monday-Friday (Warsaw time)
-const scrapeStockwatchInfoWeekdaySchedule =
-  process.env.SCRAP_STOCKWATCH_INFO_SCHEDULE_WEEKDAY || "0 30 8-23 * * 1-5";
+// Weekday morning/afternoon: Every 5 minutes from 08:30-16:59, Monday-Friday (Warsaw time)
+const scrapeStockwatchInfoWeekdayMorningSchedule =
+  process.env.SCRAP_STOCKWATCH_INFO_SCHEDULE_WEEKDAY_MORNING ||
+  "0 */5 8-16 * * 1-5";
+
+// Weekday evening: Every hour from 17:00-23:00, Monday-Friday (Warsaw time)
+const scrapeStockwatchInfoWeekdayEveningSchedule =
+  process.env.SCRAP_STOCKWATCH_INFO_SCHEDULE_WEEKDAY_EVENING ||
+  "0 0 17-23 * * 1-5";
 
 // Weekend: 12:00 and 23:00 on Saturday-Sunday (Warsaw time)
 const scrapeStockwatchInfoWeekendSchedule =
   process.env.SCRAP_STOCKWATCH_INFO_SCHEDULE_WEEKEND || "0 0 12,23 * * 0,6";
 
 cron.schedule(
-  scrapeStockwatchInfoWeekdaySchedule,
+  scrapeStockwatchInfoWeekdayMorningSchedule,
   async () => {
     await scrapeStockwatchInfoJob();
   },
   { timezone: "Europe/Warsaw" }
 );
 console.log(
-  `✓ Scheduled: Scrape stockwatch info - Weekdays (${scrapeStockwatchInfoWeekdaySchedule})`
+  `✓ Scheduled: Scrape stockwatch info - Weekdays Morning (${scrapeStockwatchInfoWeekdayMorningSchedule})`
+);
+
+cron.schedule(
+  scrapeStockwatchInfoWeekdayEveningSchedule,
+  async () => {
+    await scrapeStockwatchInfoJob();
+  },
+  { timezone: "Europe/Warsaw" }
+);
+console.log(
+  `✓ Scheduled: Scrape stockwatch info - Weekdays Evening (${scrapeStockwatchInfoWeekdayEveningSchedule})`
 );
 
 cron.schedule(

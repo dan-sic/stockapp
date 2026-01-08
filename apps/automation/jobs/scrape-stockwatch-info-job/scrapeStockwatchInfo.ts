@@ -90,7 +90,8 @@ async function scrapeListPage(
         !observedCompanies || observedCompanies.has(companyName);
 
       // Only include records that pass both filters
-      if (isNewRecord && isObservedCompany) {
+      if (isNewRecord) {
+        // if (isNewRecord && isObservedCompany) {
         records.push({
           companyName,
           date: dateText,
@@ -148,19 +149,19 @@ export async function scrapeStockwatchInfoJob(): Promise<ScrapedRecord[]> {
     // Step 1: Get the list of observed companies from the database
     const observedCompanyNames = await getObservedCompanyNames();
     const observedCompaniesSet = new Set(observedCompanyNames);
-    console.log(
-      `Observing ${observedCompanyNames.length} companies: ${
-        observedCompanyNames.join(", ") || "none"
-      }`
-    );
+    // console.log(
+    //   `Observing ${observedCompanyNames.length} companies: ${
+    //     observedCompanyNames.join(", ") || "none"
+    //   }`
+    // );
 
     // If no companies are observed, skip scraping
-    if (observedCompanyNames.length === 0) {
-      console.log(
-        "No companies are marked as observed. Skipping scraping. Mark companies as observed in the database to enable scraping."
-      );
-      return [];
-    }
+    // if (observedCompanyNames.length === 0) {
+    //   console.log(
+    //     "No companies are marked as observed. Skipping scraping. Mark companies as observed in the database to enable scraping."
+    //   );
+    //   return [];
+    // }
 
     // Step 2: Get the last scraped timestamp from the database
     const lastScrapedTimestamp = await getLastScrapedTimestamp(JOB_NAME);
@@ -239,6 +240,20 @@ export async function scrapeStockwatchInfoJob(): Promise<ScrapedRecord[]> {
       }
     }
 
+    try {
+      console.log("revalidating notifications");
+      const webServiceUrl =
+        process.env.WEB_SERVICE_URL || "https://localhost:3000";
+
+      await fetch(`${webServiceUrl}/api/revalidate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: "/notifications" }),
+      });
+    } catch (error) {
+      console.error(`Error revalidating notifications: `, error);
+    }
+
     // Step 4: Update the job metadata with the most recent timestamp
     if (mostRecentTimestamp) {
       await updateJobMetadata(JOB_NAME, mostRecentTimestamp, {
@@ -257,7 +272,9 @@ export async function scrapeStockwatchInfoJob(): Promise<ScrapedRecord[]> {
       }, inserted: ${insertedCount}`
     );
 
-    console.log(`\n✓ Success! Inserted ${insertedCount} records into database.`);
+    console.log(
+      `\n✓ Success! Inserted ${insertedCount} records into database.`
+    );
     return results;
   } catch (error) {
     console.error("✗ Error in scrapeStockwatchInfoJob:", error);

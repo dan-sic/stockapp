@@ -6,6 +6,7 @@ import {
   publicInformation,
   pushSubscription,
 } from "@stock-app/db/schema";
+import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { PushSubscription } from "web-push";
 
@@ -17,8 +18,31 @@ export async function getCompanies() {
   return await db.select().from(company);
 }
 
+export async function getCompanyByTicker(ticker: string) {
+  const result = await db
+    .select()
+    .from(company)
+    .where(eq(company.ticker, ticker))
+    .limit(1);
+  return result[0] || null;
+}
+
 export async function getNotifications() {
-  return await db.select().from(publicInformation);
+  return await db
+    .select({
+      id: publicInformation.id,
+      title: publicInformation.title,
+      content: publicInformation.content,
+      source: publicInformation.source,
+      type: publicInformation.type,
+      companyId: publicInformation.companyId,
+      timestamp: publicInformation.timestamp,
+      companyName: company.name,
+      companyTicker: company.ticker,
+    })
+    .from(publicInformation)
+    .innerJoin(company, eq(publicInformation.companyId, company.id))
+    .orderBy(desc(publicInformation.timestamp));
 }
 
 export async function revalidateNotifications() {
