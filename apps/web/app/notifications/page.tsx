@@ -1,4 +1,4 @@
-import { getNotifications } from "@/lib/actions";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,10 +11,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown } from "lucide-react";
+import { deleteNotifications, getNotifications } from "@/lib/actions";
 import DOMPurify from "isomorphic-dompurify";
-import { NotificationListener } from "./NotificationListener";
+import { ChevronDown, TrashIcon } from "lucide-react";
 import Link from "next/link";
+import { NotificationListener } from "./NotificationListener";
 
 export default async function Notifications() {
   const notifications = await getNotifications();
@@ -33,6 +34,23 @@ export default async function Notifications() {
                 <Collapsible>
                   <CardHeader>
                     <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <form action={deleteNotifications}>
+                          <input
+                            type="hidden"
+                            name="ids"
+                            value={notification.id}
+                          />
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            type="submit"
+                            aria-label="Submit"
+                          >
+                            <TrashIcon />
+                          </Button>
+                        </form>
+                      </div>
                       <div className="flex-1">
                         <CardTitle className="flex items-center gap-4">
                           <Link
@@ -45,13 +63,16 @@ export default async function Notifications() {
                         </CardTitle>
                         <CardDescription className="mt-2 flex items-center gap-4">
                           <span>
-                            {new Date(notification.timestamp).toLocaleString('pl-PL', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
+                            {new Date(notification.timestamp).toLocaleString(
+                              "pl-PL",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
                           </span>
                           {/* {notification.type && (
                             <>

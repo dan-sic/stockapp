@@ -6,9 +6,10 @@ import {
   publicInformation,
   pushSubscription,
 } from "@stock-app/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { PushSubscription } from "web-push";
+import { z } from "zod";
 
 export async function createCompany(data: CompanyData) {
   await db.insert(company).values(data);
@@ -43,6 +44,37 @@ export async function getNotifications() {
     .from(publicInformation)
     .innerJoin(company, eq(publicInformation.companyId, company.id))
     .orderBy(desc(publicInformation.timestamp));
+}
+
+const deleteNotificationsSchema = z.union([
+  z.string(),
+  z.array(z.string()).min(1),
+]);
+
+export async function deleteNotifications(formData: FormData) {
+  const ids = formData.get("ids");
+
+  try {
+    const validated = deleteNotificationsSchema.parse(ids);
+    const idsArray = Array.isArray(validated) ? validated : [validated];
+    const idsArrayNumbers = idsArray.map(Number);
+
+    if (idsArray.length === 1) {
+      await db
+        .delete(publicInformation)
+        .where(eq(publicInformation.id, idsArrayNumbers[0]));
+    } else {
+      await db
+        .delete(publicInformation)
+        .where(inArray(publicInformation.id, idsArrayNumbers));
+    }
+
+    revalidatePath("/notifications");
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+    }
+    console.error("Error deleting notifications:", error);
+  }
 }
 
 export async function revalidateNotifications() {
