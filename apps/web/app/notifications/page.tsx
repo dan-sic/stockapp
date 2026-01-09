@@ -17,6 +17,8 @@ import { ChevronDown, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { NotificationListener } from "./NotificationListener";
 
+export const dynamic = "force-dynamic";
+
 export default async function Notifications() {
   const notifications = await getNotifications();
 
