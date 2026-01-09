@@ -10,11 +10,11 @@ echo "Building images..."
 docker compose build
 
 echo "Tagging images..."
-docker tag stock-app-web:latest $REGISTRY/$USERNAME/stock-app-web:$IMAGE_TAG
+# docker tag stock-app-web:latest $REGISTRY/$USERNAME/stock-app-web:$IMAGE_TAG
 docker tag stock-app-automation:latest $REGISTRY/$USERNAME/stock-app-automation:$IMAGE_TAG
 
 echo "Pushing images to $REGISTRY..."
-docker push $REGISTRY/$USERNAME/stock-app-web:$IMAGE_TAG
+# docker push $REGISTRY/$USERNAME/stock-app-web:$IMAGE_TAG
 docker push $REGISTRY/$USERNAME/stock-app-automation:$IMAGE_TAG
 
 echo "✅ Images pushed successfully!"
