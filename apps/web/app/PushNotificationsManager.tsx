@@ -45,8 +45,8 @@ export const PushNotificationsManager = () => {
       // Show a test notification to register with macOS
       await registration.showNotification("Notifications Enabled", {
         body: "You'll now receive push notifications",
-        icon: "/icon192.png",
-        badge: "/icon192.png",
+        icon: "/app-images/android/android-launchericon-192-192.png",
+        badge: "/app-images/android/android-launchericon-192-192.png",
         tag: "welcome-notification",
       });
       console.log("Welcome notification shown");

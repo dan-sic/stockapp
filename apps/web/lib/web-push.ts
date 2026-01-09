@@ -9,7 +9,10 @@ webpush.setVapidDetails(
   process.env.VAPID_PRIVATE_KEY!
 );
 
-export async function sendNotification(message?: string) {
+export async function sendNotification(notification: {
+  title: string;
+  body: string;
+}) {
   try {
     // Fetch all subscriptions from database
     const subscriptions = await db.select().from(pushSubscription);
@@ -34,9 +37,9 @@ export async function sendNotification(message?: string) {
           await webpush.sendNotification(
             pushSubscriptionObject,
             JSON.stringify({
-              title: "New notifications",
-              body: message || "You have new updates available",
-              icon: "/icon192.png",
+              title: notification.title,
+              body: notification.body,
+              icon: "/app-images/android/android-launchericon-192-192.png",
             })
           );
           console.log("Notification sent successfully to:", sub.endpoint);

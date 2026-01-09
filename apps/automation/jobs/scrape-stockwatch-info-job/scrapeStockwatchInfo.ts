@@ -240,10 +240,10 @@ export async function scrapeStockwatchInfoJob(): Promise<ScrapedRecord[]> {
       }
     }
 
+    const webServiceUrl =
+      process.env.WEB_SERVICE_URL || "https://localhost:3000";
     try {
       console.log("revalidating notifications");
-      const webServiceUrl =
-        process.env.WEB_SERVICE_URL || "https://localhost:3000";
 
       await fetch(`${webServiceUrl}/api/revalidate`, {
         method: "POST",
@@ -252,6 +252,23 @@ export async function scrapeStockwatchInfoJob(): Promise<ScrapedRecord[]> {
       });
     } catch (error) {
       console.error(`Error revalidating notifications: `, error);
+    }
+
+    try {
+      console.log("sending push notifications");
+
+      await fetch(`${webServiceUrl}/api/notify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          notifications: results.map((r) => ({
+            title: r.companyName,
+            body: r.title,
+          })),
+        }),
+      });
+    } catch (error) {
+      console.error(`Error sending notifications: `, error);
     }
 
     // Step 4: Update the job metadata with the most recent timestamp

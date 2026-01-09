@@ -39,11 +39,11 @@ self.addEventListener('push', function (event) {
       console.log('Push notification data:', data);
       const options = {
         body: data.body,
-        icon: data.icon || '/icon192.png',
-        badge: '/icon192.png',
-        // vibrate: [100, 50, 100],
-        requireInteraction: false,
-        silent: true, // Set to true since we'll play our own sound
+        icon: data.icon || '/app-images/android/android-launchericon-192-192.png',
+        badge: '/app-images/android/android-launchericon-192-192.png',
+        vibrate: [100, 50, 100],
+        requireInteraction: true,
+        silent: false,
         data: {
           dateOfArrival: Date.now(),
           primaryKey: '2',
