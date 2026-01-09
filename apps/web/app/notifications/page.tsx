@@ -12,10 +12,10 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { deleteNotifications, getNotifications } from "@/lib/actions";
-import DOMPurify from "isomorphic-dompurify";
 import { ChevronDown, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { NotificationListener } from "./NotificationListener";
+import { SanitizedContent } from "./SanitizedContent";
 
 export const dynamic = "force-dynamic";
 
@@ -97,12 +97,7 @@ export default async function Notifications() {
                   </CardHeader>
                   <CollapsibleContent>
                     <CardContent>
-                      <div
-                        className="text-sm whitespace-pre-wrap"
-                        dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(notification.content),
-                        }}
-                      />
+                      <SanitizedContent content={notification.content} />
                     </CardContent>
                   </CollapsibleContent>
                 </Collapsible>
