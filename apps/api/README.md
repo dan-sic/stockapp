@@ -51,6 +51,28 @@ npm start
 
 - `GET /health` - API health check
 
+### WebSocket
+
+- `GET /ws/info` - Get WebSocket connection info and client count
+- WebSocket endpoint: `ws://localhost:3001` - Real-time updates for data changes
+
+## WebSocket Events
+
+The API broadcasts the following events via WebSocket when data changes occur:
+
+### Company Events
+- `company_created` - When a new company is created
+- `company_updated` - When a company is updated
+- `company_observed_changed` - When a company's observation status changes
+- `company_deleted` - When a company is deleted
+
+### Notification Events
+- `notification_created` - When a new notification is created
+- `notification_updated` - When a notification is updated
+- `notification_deleted` - When a notification is deleted
+
+Each event includes a `type` field and a `data` field with the relevant entity.
+
 ## Example Requests
 
 ### Create a Company
@@ -83,4 +105,55 @@ curl -X POST http://localhost:3001/api/notifications \
 curl -X PATCH http://localhost:3001/api/companies/1/observe \
   -H "Content-Type: application/json" \
   -d '{"observed": true}'
+```
+
+### Connect to WebSocket
+
+#### JavaScript Example
+```javascript
+const ws = new WebSocket('ws://localhost:3001');
+
+ws.onopen = () => {
+  console.log('Connected to WebSocket');
+};
+
+ws.onmessage = (event) => {
+  const message = JSON.parse(event.data);
+  console.log('Received:', message);
+
+  // Handle different event types
+  switch (message.type) {
+    case 'company_created':
+      console.log('New company:', message.data);
+      break;
+    case 'notification_created':
+      console.log('New notification:', message.data);
+      break;
+    // ... handle other events
+  }
+};
+
+ws.onerror = (error) => {
+  console.error('WebSocket error:', error);
+};
+
+ws.onclose = () => {
+  console.log('WebSocket connection closed');
+};
+```
+
+#### Node.js Example
+```javascript
+import WebSocket from 'ws';
+
+const ws = new WebSocket('ws://localhost:3001');
+
+ws.on('open', () => {
+  console.log('Connected to WebSocket');
+});
+
+ws.on('message', (data) => {
+  const message = JSON.parse(data.toString());
+  console.log('Received:', message);
+});
 ```

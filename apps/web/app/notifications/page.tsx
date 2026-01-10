@@ -14,17 +14,19 @@ import {
 import { deleteNotifications, getNotifications } from "@/lib/actions";
 import { ChevronDown, TrashIcon } from "lucide-react";
 import Link from "next/link";
-import { NotificationListener } from "./NotificationListener";
+// import { NotificationListener } from "./NotificationListener";
 import { SanitizedContent } from "./SanitizedContent";
 
 export const dynamic = "force-dynamic";
 
 export default async function Notifications() {
-  const notifications = await getNotifications();
+  const data = await fetch(`${process.env.API_URL!}/api/notifications`);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const notifications: any[] = await data.json();
 
   return (
     <>
-      <NotificationListener />
+      {/* <NotificationListener /> */}
       <div className="container mx-auto py-8">
         <h1 className="text-3xl font-bold mb-6">Notifications</h1>
         <div className="space-y-4">

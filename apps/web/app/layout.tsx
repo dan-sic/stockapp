@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PushNotificationsManager } from "./PushNotificationsManager";
+import { WebSocketProvider } from "./WebSocketContext";
+import { WebSocketHandler } from "./WebSocketHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +30,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <PushNotificationsManager />
-        {children}
+        <WebSocketProvider>
+          <WebSocketHandler />
+          <PushNotificationsManager />
+          {children}
+        </WebSocketProvider>
       </body>
     </html>
   );

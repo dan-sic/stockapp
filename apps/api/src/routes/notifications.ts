@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { db } from "../../db/db";
-import { publicInformation } from "../../db/schema";
+import { db } from "../db/db";
+import { company, publicInformation } from "../db/schema";
 import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
+import { wsManager } from "../websocket";
 
 const router = Router();
 
@@ -30,8 +31,19 @@ router.get("/", async (req, res) => {
     const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
 
     const notifications = await db
-      .select()
+      .select({
+        id: publicInformation.id,
+        title: publicInformation.title,
+        content: publicInformation.content,
+        source: publicInformation.source,
+        type: publicInformation.type,
+        companyId: publicInformation.companyId,
+        timestamp: publicInformation.timestamp,
+        companyName: company.name,
+        companyTicker: company.ticker,
+      })
       .from(publicInformation)
+      .innerJoin(company, eq(publicInformation.companyId, company.id))
       .orderBy(desc(publicInformation.timestamp))
       .limit(limit)
       .offset(offset);
@@ -108,6 +120,11 @@ router.post("/", async (req, res) => {
       })
       .returning();
 
+    wsManager.broadcast({
+      type: "notification_created",
+      data: result[0],
+    });
+
     res.status(201).json(result[0]);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -171,6 +188,11 @@ router.delete("/:id", async (req, res) => {
     if (result.length === 0) {
       return res.status(404).json({ error: "Notification not found" });
     }
+
+    wsManager.broadcast({
+      type: "notification_deleted",
+      data: result[0],
+    });
 
     res.json({
       message: "Notification deleted successfully",

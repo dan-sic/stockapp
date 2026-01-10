@@ -13,6 +13,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@stock-app/db": "*",
     "class-variance-authority": "^0.7.1",
+    "@tanstack/react-query": "5.90.16",
     "clsx": "^2.1.1",
     "dompurify": "^3.3.1",
     "lucide-react": "^0.562.0",
