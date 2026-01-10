@@ -4,6 +4,7 @@
     { "path": "./packages/db" },
     { "path": "./apps/web" },
     { "path": "./apps/mobile" },
-    { "path": "./apps/automation" }
+    { "path": "./apps/automation" },
+    { "path": "./apps/api" }
   ]
 }
