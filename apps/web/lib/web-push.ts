@@ -40,7 +40,10 @@ export async function sendNotification(notification: {
               title: notification.title,
               body: notification.body,
               icon: "/app-images/android/android-launchericon-192-192.png",
-            })
+            }),
+            {
+              urgency: "high",
+            }
           );
           console.log("Notification sent successfully to:", sub.endpoint);
         } catch (error) {

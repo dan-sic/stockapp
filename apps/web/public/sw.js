@@ -41,17 +41,25 @@ self.addEventListener('push', function (event) {
         body: data.body,
         icon: data.icon || '/app-images/android/android-launchericon-192-192.png',
         badge: '/app-images/android/android-launchericon-192-192.png',
-        vibrate: [100, 50, 100],
+        silent:false,
+        // Android ignores vibrate in service workers, but keep for other platforms
+        vibrate: [200, 100, 200, 100, 200],
+        // Don't require interaction on Android - allows heads-up notification
         requireInteraction: true,
-        silent: false,
+        tag: data.tag || 'stock-notification-' + Date.now(),
+        // Renotify ensures it shows even if tag exists
+        renotify: true,
+        // Add timestamp for Android notification sorting
+        timestamp: Date.now(),
         data: {
           dateOfArrival: Date.now(),
-          primaryKey: '2',
+          primaryKey: data.primaryKey || '2',
+          url: data.url || self.location.origin,
         },
       };
       console.log('Showing notification with options:', options);
 
-      // Play custom sound
+      // Play custom sound only if app is open
       playNotificationSound();
 
       event.waitUntil(
